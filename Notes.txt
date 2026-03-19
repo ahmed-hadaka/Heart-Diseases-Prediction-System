@@ -1,0 +1,20 @@
+Mysql:
+
+-->The foreign key always exists in the child entity.
+
+--> One-to-One: Foreign key can be in either table, depending on ownership.
+
+--> One-to-Many: Foreign key is always in the “many” side.
+
+--> Many-to-One: Foreign key is always in the “many” side.
+
+--> Many-to-Many: Use a join table with foreign keys from both entities.
+
+--> Unidirectional: Only one entity knows about the other.
+    This can simplify the model and reduce complexity, but it also means you can’t navigate back from the second entity.
+
+--> Bidirectional: Both entities know about each other, allowing navigation in both directions.
+    This provides more flexibility but can also introduce more complexity, especially in managing consistency.
+
+--> @JoinColumn(nullable = true) <-- this is the default value of nullable
+--> @JoinColumn annotation always exists in the child entity, which has the foreign key.
