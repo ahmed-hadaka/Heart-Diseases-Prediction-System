@@ -51,14 +51,14 @@ public class PatientController {
         Patient patient = patientService.getPatientByEmail(email);
 
         // map it to person DTO
-        PatientDTO personDTO = PatientMapper.toPatientDTO(patient);
+        PatientDTO patientDTO = PatientMapper.toPatientDTO(patient);
 
         // forward it
-        return ResponseEntity.ok(personDTO);
+        return ResponseEntity.ok(patientDTO);
     }
 
-    @PostMapping("/edit-patient")
-    public ResponseEntity<Map<String, String>> savePatient(@RequestBody @Valid PatientDTO patientDTO, BindingResult bindingResult,Authentication authentication){
+    @PostMapping("/update-patient")
+    public ResponseEntity<Map<String, String>> updatePatient(@RequestBody @Valid PatientDTO patientDTO, BindingResult bindingResult,Authentication authentication){
         //handle validation errors
       Map<String,String >  errors = handleValidationErrors(bindingResult);
       if(!errors.isEmpty())
@@ -71,7 +71,7 @@ public class PatientController {
         Patient patient = patientService.getPatientByEmail(email);
 
         //call service.save()
-        String result = patientService.editPatient(patientDTO,patient);
+        String result = patientService.updatePatient(patientDTO,patient);
 
         return ResponseEntity.ok(Map.of("Message",result));
     }

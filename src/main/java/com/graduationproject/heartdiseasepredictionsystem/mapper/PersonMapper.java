@@ -13,6 +13,7 @@ public class PersonMapper {
         }
 
         PersonDTO dto = new PersonDTO();
+        dto.setId(person.getId());
         dto.setEmail(person.getEmail());
         dto.setUserName(person.getUserName());
         dto.setContactNumber(person.getContactNumber());
@@ -28,7 +29,7 @@ public class PersonMapper {
 
         // Mapping Role object to a simple String
         dto.setRoleName(person.getRole().getName()); // Assuming Role has getName()
-
+        dto.setAge(person.getAge());
         return dto;
     }
 }

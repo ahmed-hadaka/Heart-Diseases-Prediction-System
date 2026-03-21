@@ -14,6 +14,7 @@ import org.springframework.data.annotation.ReadOnlyProperty;
 @Data
 
 public class PersonDTO {
+    private Long id;
     @Size(min = 3, message = "at least 3 characters required in the password")
     private String userName;
 

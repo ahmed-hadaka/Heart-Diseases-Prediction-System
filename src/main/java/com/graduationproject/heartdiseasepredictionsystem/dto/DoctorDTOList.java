@@ -6,6 +6,8 @@ import lombok.Data;
 @Data
 public class DoctorDTOList {
 
+    private Long id;
+
     @Size(min = 3, message = "at least 3 characters required in the name")
     private String name;
 

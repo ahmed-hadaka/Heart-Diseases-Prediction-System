@@ -3,6 +3,7 @@ package com.graduationproject.heartdiseasepredictionsystem.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.graduationproject.heartdiseasepredictionsystem.model.Doctor;
 import com.graduationproject.heartdiseasepredictionsystem.model.Prediction;
+import com.graduationproject.heartdiseasepredictionsystem.model.Prescription;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,6 +18,8 @@ import java.util.List;
 
 @Data
 public class PatientDTO {
+
+    private Long id;
 
     @Size(min = 3, message = "at least 3 characters required in the name")
     private String name;
@@ -60,13 +63,14 @@ public class PatientDTO {
     @NotBlank(message = "Country is required")
     private String country;
 
-    @Column(nullable = false,unique = true)
     @Email(message = "Email is Invalid")
     @Pattern(
             regexp = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$",
             message = "Email must contain a valid domain like .com or .net"
     )
     private String doctorEmail;
+
+    private List<Prescription> prescriptions;
 
    private List<PredictionDTO> predictionDTOS;
 

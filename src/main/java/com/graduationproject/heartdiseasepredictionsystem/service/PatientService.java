@@ -6,14 +6,13 @@ import com.graduationproject.heartdiseasepredictionsystem.exception.UserNotFound
 import com.graduationproject.heartdiseasepredictionsystem.mapper.PatientMapper;
 import com.graduationproject.heartdiseasepredictionsystem.model.Doctor;
 import com.graduationproject.heartdiseasepredictionsystem.model.Patient;
-import com.graduationproject.heartdiseasepredictionsystem.model.Prediction;
 import com.graduationproject.heartdiseasepredictionsystem.repository.DoctorRepository;
 import com.graduationproject.heartdiseasepredictionsystem.repository.PatientRepository;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -46,7 +45,7 @@ public class PatientService {
         return map;
     }
 
-    public String editPatient(@Valid PatientDTO patientDTO, Patient existingPatient) {
+    public String updatePatient(@Valid PatientDTO patientDTO, Patient existingPatient) {
         Patient patient  = PatientMapper.toPatientEntity(patientDTO,"EDIT",existingPatient);
 
         Patient savedPatient = patientRepository.save(patient);
@@ -68,5 +67,8 @@ public class PatientService {
 
         doctor.get().getPatientList().add(patient.get());
         patient.get().setDoctor(doctor.get());
+        patient.get().setBookingDateAndTime(LocalDateTime.now());
+        doctorRepository.save(doctor.get());
+        patientRepository.save(patient.get());
     }
 }

@@ -2,17 +2,12 @@ package com.graduationproject.heartdiseasepredictionsystem.controller;
 
 import com.graduationproject.heartdiseasepredictionsystem.dto.PatientsDTOList;
 import com.graduationproject.heartdiseasepredictionsystem.dto.PredictionDTO;
-import com.graduationproject.heartdiseasepredictionsystem.model.Doctor;
-import com.graduationproject.heartdiseasepredictionsystem.model.Patient;
+import com.graduationproject.heartdiseasepredictionsystem.model.Prescription;
 import com.graduationproject.heartdiseasepredictionsystem.service.DoctorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -37,12 +32,32 @@ public class DoctorController {
     }
 
     @GetMapping("view-patient-predictionsList/{id}")
-    public ResponseEntity<List<PredictionDTO>> viewPatientPredictionsList(@PathVariable Long id, Authentication authentication) throws Exception {
+    public ResponseEntity<List<PredictionDTO>> viewPatientPredictionsList(@PathVariable(name = "id") Long patientId, Authentication authentication) throws Exception {
         // get person from persistence layer
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String email = userDetails.getUsername();
+        String doctorEmail = userDetails.getUsername();
 
-        List<PredictionDTO> predictionsDTOs = doctorService.viewPatientPredictionsList(id,email);
+        List<PredictionDTO> predictionsDTOs = doctorService.viewPatientPredictionsList(patientId,doctorEmail);
         return ResponseEntity.ok(predictionsDTOs);
     }
+
+    @GetMapping("write-prescription/{patientId}")
+    public ResponseEntity<Prescription> writePrescription(@PathVariable Long patientId, Authentication authentication) throws Exception {
+        // get person from persistence layer
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String doctorEmail = userDetails.getUsername();
+
+        Prescription prescription = doctorService.writePrescription(patientId,doctorEmail);
+
+        return ResponseEntity.ok(prescription);
+    }
+
+    @PostMapping("save-prescription")
+    public ResponseEntity<String> savePrescription(@RequestBody Prescription prescription, Authentication authentication) throws Exception {
+
+        doctorService.savePrescription(prescription);
+
+        return ResponseEntity.ok("prescription saved successfully!");
+    }
+
 }

@@ -25,6 +25,7 @@ public class DoctorMapper {
 
         DoctorDTOList dto = new DoctorDTOList();
 
+        dto.setId(doctor.getId());
         dto.setName(doctor.getName());
         dto.setContactNumber(doctor.getContactNumber());
 

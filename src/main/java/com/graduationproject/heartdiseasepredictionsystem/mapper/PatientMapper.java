@@ -38,6 +38,7 @@ public class PatientMapper {
             patient = new Patient();
             patient.setEmail(patientDTO.getEmail());
             patient.setRole(roleRepository.findById(2L).get());
+            patient.setPassword(passwordEncoder.encode(patientDTO.getPassword()));
             Optional<Doctor> doctor = doctorRepository.findByEmail(patientDTO.getDoctorEmail());
             if(!doctor.isEmpty())
                 patient.setDoctor(doctor.get());
@@ -48,7 +49,6 @@ public class PatientMapper {
 
         patient.setName(patientDTO.getName());
         patient.setUserName(patientDTO.getUserName());
-        patient.setPassword(passwordEncoder.encode(patientDTO.getPassword()));
         patient.setContactNumber(patientDTO.getContactNumber());
 
 
@@ -57,7 +57,9 @@ public class PatientMapper {
         address.setState(patientDTO.getState());
         address.setCountry(patientDTO.getCountry());
         patient.setAddress(address);
-// prediction add.
+
+        patient.setAge(patientDTO.getAge());
+        patient.setPrescriptions(patientDTO.getPrescriptions());
 
 
         return patient;
@@ -71,11 +73,13 @@ public class PatientMapper {
 
         PatientDTO dto = new PatientDTO();
 
+        dto.setId(patient.getId());
         dto.setName(patient.getName());
         dto.setUserName(patient.getUserName());
         dto.setEmail(patient.getEmail());
         dto.setPassword(patient.getPassword());
         dto.setContactNumber(patient.getContactNumber());
+        dto.setAge(patient.getAge());
 
         if (patient.getAddress() != null) {
             dto.setStreetAddress(patient.getAddress().getStreetAddress());
@@ -94,6 +98,8 @@ public class PatientMapper {
         }
         dto.setPredictionDTOS(predictionDTOList);
 
+        dto.setPrescriptions(patient.getPrescriptions());
+
         if(patient.getDoctor() != null)
             dto.setDoctorEmail(patient.getDoctor().getEmail());
         return dto;
@@ -101,7 +107,7 @@ public class PatientMapper {
 
     public static PatientsDTOList toPatientDTOList(Patient patient) {
         PatientsDTOList patientsDTOList = new PatientsDTOList();
-
+        patientsDTOList.setId(patient.getId());
         patientsDTOList.setPatientName(patient.getName());
         patientsDTOList.setBookingDateAndTime(patient.getBookingDateAndTime());
 

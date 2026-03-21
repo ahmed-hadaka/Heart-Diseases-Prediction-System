@@ -14,9 +14,11 @@ import com.graduationproject.heartdiseasepredictionsystem.model.Patient;
 import com.graduationproject.heartdiseasepredictionsystem.model.Person;
 import com.graduationproject.heartdiseasepredictionsystem.model.Prediction;
 import com.graduationproject.heartdiseasepredictionsystem.repository.DoctorRepository;
+import com.graduationproject.heartdiseasepredictionsystem.repository.PatientRepository;
 import com.graduationproject.heartdiseasepredictionsystem.repository.PersonRepository;
 import com.graduationproject.heartdiseasepredictionsystem.repository.PredictionRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,12 +29,14 @@ import java.util.Optional;
 public class AdminService {
     private final PersonRepository personRepository;
     private final DoctorRepository doctorRepository;
+    private final PatientRepository patientRepository;
     private PredictionRepository predictionRepository;
 
-    public AdminService(PersonRepository personRepository, PatientService patientService, DoctorService doctorService, PredictionRepository predictionRepository, DoctorRepository doctorRepository) {
+    public AdminService(PersonRepository personRepository, PatientService patientService, DoctorService doctorService, PredictionRepository predictionRepository, DoctorRepository doctorRepository, PatientRepository patientRepository) {
         this.personRepository = personRepository;
         this.predictionRepository =predictionRepository;
         this.doctorRepository = doctorRepository;
+        this.patientRepository = patientRepository;
     }
 
     public List<PersonDTO> getAllUsersExceptAdmins(String email) {
@@ -54,12 +58,19 @@ public class AdminService {
             return personDTO;
     }
 
+    @Transactional
     public void deleteUser(Long id) {
         Optional<Person> person = personRepository.findById(id);
 
         if(person.isEmpty() || person.get().getRole().getName().equals("ADMIN"))
             throw new UserNotFoundException("No users with id: "+id);
 
+
+        if(person.get().getRole().getName().equals("DOCTOR")) {
+            patientRepository.removeDoctorFromPatients(id);
+            doctorRepository.deleteById(id);
+        }else
+            patientRepository.deleteById(id);
         personRepository.deleteById(id);
     }
 
