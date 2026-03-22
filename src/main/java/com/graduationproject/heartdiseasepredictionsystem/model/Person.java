@@ -41,7 +41,7 @@ public class Person {
     @Pattern(regexp = "^\\+?[0-9]{10,15}$",message = "Invalid Contact Number!")
     private String contactNumber;
 
-    @Size(min = 2, message = "at least 2 characters required in the password")
+    @Size(min = 2, message = "at least 2 characters required in the age")
     @Range(max = 150)
     private String age;
 
